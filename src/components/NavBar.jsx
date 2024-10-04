@@ -6,33 +6,29 @@ import styled, { ThemeContext } from 'styled-components';
 import endpoints from '../constants/endpoints';
 import ThemeToggler from './ThemeToggler';
 
-const styles = {
-  logoStyle: {
-    width: 50,
-    height: 40,
-  },
-};
+// Define default logo styles
+const Logo = styled.img`
+  width: ${({ width }) => width || '50px'};
+  height: ${({ height }) => height || '40px'};
+`;
 
+// External Link styles with theme handling
 const ExternalNavLink = styled.a`
-  color: ${(props) => props.theme.navbarTheme.linkColor};
+  color: ${({ theme }) => theme.navbarTheme.linkColor}; // Use theme for color
+  font-weight: bold; // Set font weight to bold
   &:hover {
-    color: ${(props) => props.theme.navbarTheme.linkHoverColor};
-  }
-  &::after {
-    background-color: ${(props) => props.theme.accentColor};
+    color: ${({ theme }) => theme.navbarTheme.linkHoverColor}; // Use theme for hover color
   }
 `;
 
 const InternalNavLink = styled(NavLink)`
-  color: ${(props) => props.theme.navbarTheme.linkColor};
+  color: ${({ theme }) => theme.navbarTheme.linkColor}; // Use theme for color
+  font-weight: bold; // Set font weight to bold
   &:hover {
-    color: ${(props) => props.theme.navbarTheme.linkHoverColor};
-  }
-  &::after {
-    background-color: ${(props) => props.theme.accentColor};
+    color: ${({ theme }) => theme.navbarTheme.linkHoverColor}; // Use theme for hover color
   }
   &.navbar__link--active {
-    color: ${(props) => props.theme.navbarTheme.linkActiveColor};
+    color: ${({ theme }) => theme.navbarTheme.linkActiveColor}; // Use theme for active color
   }
 `;
 
@@ -41,48 +37,47 @@ const NavBar = () => {
   const [data, setData] = useState(null);
   const [expanded, setExpanded] = useState(false);
 
+  // Fetch navbar data
   useEffect(() => {
-    fetch(endpoints.navbar, {
-      method: 'GET',
-    })
+    fetch(endpoints.navbar, { method: 'GET' })
       .then((res) => res.json())
       .then((res) => setData(res))
-      .catch((err) => err);
+      .catch((err) => console.error(err));
   }, []);
 
   return (
     <Navbar
       fixed="top"
       expand="md"
-      bg="dark"
-      variant="dark"
-      className="navbar-custom"
+      className={`navbar-custom transparent-navbar ${theme.mode}-mode`}
       expanded={expanded}
     >
       <Container>
+        {/* Logo rendering with fallback to default dimensions */}
         {data?.logo && (
           <Navbar.Brand href="/">
-            <img
+            <Logo
               src={data?.logo?.source}
-              className="d-inline-block align-top"
               alt="main logo"
-              style={
-                data?.logo?.height && data?.logo?.width
-                  ? { height: data?.logo?.height, width: data?.logo?.width }
-                  : styles.logoStyle
-              }
+              width={data?.logo?.width}
+              height={data?.logo?.height}
             />
           </Navbar.Brand>
         )}
+
+        {/* Toggle button for mobile */}
         <Navbar.Toggle
           aria-controls="responsive-navbar-nav"
           onClick={() => setExpanded(!expanded)}
         />
+
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="me-auto" />
+
+          {/* Navigation Links */}
           <Nav>
-            {data
-              && data.sections?.map((section, index) => (section?.type === 'link' ? (
+            {data && data.sections?.map((section, index) => (
+              section?.type === 'link' ? (
                 <ExternalNavLink
                   key={section.title}
                   href={section.href}
@@ -90,7 +85,6 @@ const NavBar = () => {
                   rel="noopener noreferrer"
                   onClick={() => setExpanded(false)}
                   className="navbar__link"
-                  theme={theme}
                 >
                   {section.title}
                 </ExternalNavLink>
@@ -102,20 +96,19 @@ const NavBar = () => {
                   activeClassName="navbar__link--active"
                   className="navbar__link"
                   to={section.href}
-                  theme={theme}
                 >
                   {section.title}
                 </InternalNavLink>
-              )))}
+              )
+            ))}
           </Nav>
-          <ThemeToggler
-            onClick={() => setExpanded(false)}
-          />
+
+          {/* Theme Toggler */}
+          <ThemeToggler onClick={() => setExpanded(false)} />
         </Navbar.Collapse>
       </Container>
     </Navbar>
   );
 };
 
-const NavBarWithRouter = withRouter(NavBar);
-export default NavBarWithRouter;
+export default withRouter(NavBar);

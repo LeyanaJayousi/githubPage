@@ -1,0 +1,24 @@
+.theme-toggler {
+    margin-bottom: 8px;
+  }
+  
+  .theme-toggle-button {
+    background-color: transparent;
+    border: none;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+  }
+  
+  .theme-icon {
+    width: 45px;
+    height: 45px;
+    object-fit: contain;
+    border-radius: 50%;
+  }
+  

@@ -24,6 +24,16 @@
             "component": "Projects",
             "path": "/projects",
             "headerTitle": "Projects"
-        }
+        },
+        {
+            "component": "teaching",
+            "path": "/teaching",
+            "headerTitle": "Teaching"
+          },
+          {
+            "component": "blog",
+            "path": "/blog",
+            "headerTitle": "Blog"
+          }
     ]
 }

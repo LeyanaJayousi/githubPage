@@ -116,7 +116,7 @@ It has 2 keys, *logo* and *sections*.
             "href": "/skills"
         },
         {
-            "title": "Education",
+            "title": "Blog",
             "href": "/education"
         },
         {
@@ -166,7 +166,7 @@ It has 2 keys, *logo* and *sections*.
         {
             "component": "Education",
             "path": "/education",
-            "headerTitle": "Education"
+            "headerTitle": "Blog"
         },
         {
             "component": "Experience",
@@ -561,3 +561,5 @@ If you find a bug, feel free to [open an issue](https://github.com/mayankagarwal
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
 
+"# Portfolio" 
+"# Portfolio" 

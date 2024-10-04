@@ -1,36 +1,61 @@
 import React, { useContext } from 'react';
-import {
-  Button, Card, Badge, Col,
-} from 'react-bootstrap';
+import { Card, Col } from 'react-bootstrap';
 import PropTypes from 'prop-types';
 import { ThemeContext } from 'styled-components';
 import ReactMarkdown from 'react-markdown';
 
 const styles = {
   badgeStyle: {
-    paddingLeft: 10,
-    paddingRight: 10,
-    paddingTop: 5,
-    paddingBottom: 5,
-    margin: 5,
+    display: 'inline-flex',
+    alignItems: 'center',
+    borderRadius: '12px',
+    padding: '5px 10px',
+    margin: '3px',
+    fontWeight: 'bold',
+    color: 'white',
+    fontFamily: '"Helvetica Neue", Arial, sans-serif',
+    textTransform: 'capitalize',
+  },
+  logoStyle: {
+    width: 18,
+    height: 18,
+    marginRight: 4,
   },
   cardStyle: {
-    borderRadius: 10,
+    borderRadius: 8,
+    marginBottom: '1rem',
   },
   cardTitleStyle: {
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: 700,
   },
   cardTextStyle: {
     textAlign: 'left',
   },
-  linkStyle: {
-    textDecoration: 'none',
-    padding: 10,
+  githubLogoStyle: {
+    width: 50,
+    height: 50,
+    borderRadius: '50%',
+    objectFit: 'contain',
+    backgroundColor: 'transparent',
   },
-  buttonStyle: {
-    margin: 5,
+  toolsContainer: {
+    marginTop: '1rem',
+    display: 'flex',
+    flexWrap: 'wrap',
+    gap: '5px',
   },
+  cardWrapper: {
+    marginTop: '4cm',
+  },
+};
+
+const toolColors = {
+  python: '#306998',
+  django: '#092E20',
+  html: '#E44D26',
+  css: '#1572B6',
+  bootstrap: '#563D7C',
 };
 
 const ProjectCard = (props) => {
@@ -41,50 +66,69 @@ const ProjectCard = (props) => {
 
   return (
     <Col>
-      <Card
-        style={{
-          ...styles.cardStyle,
-          backgroundColor: theme.cardBackground,
-          borderColor: theme.cardBorderColor,
-        }}
-        text={theme.bsSecondaryVariant}
-      >
-        <Card.Img variant="top" src={project?.image} />
-        <Card.Body>
-          <Card.Title style={styles.cardTitleStyle}>{project.title}</Card.Title>
-          <Card.Text style={styles.cardTextStyle}>
-            {parseBodyText(project.bodyText)}
-          </Card.Text>
-        </Card.Body>
+      <div style={styles.cardWrapper}>
+        <Card
+          style={{
+            ...styles.cardStyle,
+            backgroundColor: theme.cardBackground,
+            borderColor: theme.cardBorderColor,
+          }}
+          text={theme.bsSecondaryVariant}
+        >
+          <Card.Img variant="top" src={project?.image} />
+          <Card.Body>
+            <Card.Title style={styles.cardTitleStyle}>{project.title}</Card.Title>
+            <Card.Text style={styles.cardTextStyle}>
+              {parseBodyText(project.bodyText)}
+            </Card.Text>
+          </Card.Body>
 
-        <Card.Body>
-          {project?.links?.map((link) => (
-            <Button
-              key={link.href}
-              style={styles.buttonStyle}
-              variant={'outline-' + theme.bsSecondaryVariant}
-              onClick={() => window.open(link.href, '_blank')}
-            >
-              {link.text}
-            </Button>
-          ))}
-        </Card.Body>
-        {project.tags && (
-          <Card.Footer style={{ backgroundColor: theme.cardFooterBackground }}>
-            {project.tags.map((tag) => (
-              <Badge
-                key={tag}
-                pill
-                bg={theme.bsSecondaryVariant}
-                text={theme.bsPrimaryVariant}
-                style={styles.badgeStyle}
+          <Card.Body>
+            {project?.links?.map((link) => (
+              <a
+                key={link.href}
+                href={link.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ margin: '0 5px' }}
               >
-                {tag}
-              </Badge>
+                <img
+                  src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png"
+                  alt="GitHub"
+                  style={styles.githubLogoStyle}
+                />
+              </a>
             ))}
-          </Card.Footer>
-        )}
-      </Card>
+          </Card.Body>
+          {project.tools && (
+            <Card.Body style={styles.toolsContainer}>
+              {project.tools.map((tool) => (
+                <div
+                  key={tool.name}
+                  style={{
+                    ...styles.badgeStyle,
+                    backgroundColor: toolColors[tool.name.toLowerCase()] || '#000000',
+                  }}
+                >
+                  {tool.logo && <img src={tool.logo} alt={tool.name} style={styles.logoStyle} />}
+                  {tool.name}
+                </div>
+              ))}
+            </Card.Body>
+          )}
+
+          {project.tags && (
+            <Card.Footer style={{ backgroundColor: theme.cardFooterBackground }}>
+              {project.tags.map((tag) => (
+                <div key={tag.name} style={{ ...styles.badgeStyle, backgroundColor: tag.color }}>
+                  {tag.logo && <img src={tag.logo} alt={tag.name} style={styles.logoStyle} />}
+                  {tag.name}
+                </div>
+              ))}
+            </Card.Footer>
+          )}
+        </Card>
+      </div>
     </Col>
   );
 };
@@ -98,7 +142,15 @@ ProjectCard.propTypes = {
       text: PropTypes.string.isRequired,
       href: PropTypes.string.isRequired,
     })),
-    tags: PropTypes.arrayOf(PropTypes.string),
+    tools: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      logo: PropTypes.string,
+    })),
+    tags: PropTypes.arrayOf(PropTypes.shape({
+      name: PropTypes.string.isRequired,
+      logo: PropTypes.string,
+      color: PropTypes.string,
+    })),
   }).isRequired,
 };
 

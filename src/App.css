@@ -1,4 +1,3 @@
-
 .App {
   text-align: center;
   align-items: center;
@@ -9,7 +8,38 @@
 }
 
 .navbar-custom {
-  font-size:large;
+  font-size: large;
+}
+
+.transparent-navbar {
+  transition: background-color 0.3s ease;
+}
+
+/* Light mode styles */
+.transparent-navbar.light-mode {
+  background-color: rgba(255, 255, 255, 0.8); /* Light background */
+  border: 2px solid red; /* Debugging border */
+}
+
+.transparent-navbar.light-mode .navbar__link {
+  color: black !important; /* Force black text in light mode */
+}
+
+.transparent-navbar.dark-mode .navbar__link {
+  color: white !important; /* Force white text in dark mode */
+}
+
+/* Dark mode styles */
+.transparent-navbar.dark-mode {
+  background-color: rgba(0, 0, 0, 0.5); /* Darker background */
+}
+
+.transparent-navbar.dark-mode .navbar__link {
+  color: white; /* White text in dark mode */
+}
+
+.transparent-navbar.dark-mode .navbar__link:hover {
+  color: lightgray; /* Adjust hover color for dark mode */
 }
 
 .navbar__link {
@@ -18,28 +48,32 @@
   font-size: 1em;
   cursor: pointer;
   text-decoration: none;
-  letter-spacing: .1em;
-  text-indent: .3em;
+  letter-spacing: 0.1em;
+  text-indent: 0.3em;
   border-bottom: 3px solid transparent;
+  position: relative;
 }
 
 .navbar__link::after {
-  transition: all ease-in-out .2s;
-  background: none repeat scroll 0 0;
+  transition: all ease-in-out 0.2s;
   content: "";
   display: block;
   margin-top: 2px;
   height: 3px;
   width: 0;
+  position: absolute;
+  bottom: -2px;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
- .navbar__link:hover::after {
+.navbar__link:hover::after {
   visibility: visible;
   width: 40%;
 }
 
 .navbar__link--active::after {
-  transition: all ease-in-out .2s;
+  transition: all ease-in-out 0.2s;
   width: 100%;
 }
 
@@ -70,11 +104,7 @@
   display: inline-block;
 }
 
-.Typewriter__wrapper {
-  font-size: xx-large;
-  font-weight: bold;
-}
-
+.Typewriter__wrapper,
 .Typewriter__cursor {
   font-size: xx-large;
   font-weight: bold;
@@ -105,38 +135,22 @@ section.timeline-card-content div.card-description > p {
   margin-top: 60px;
 }
 
-
+/* Media Queries */
 @media only screen and (min-width: 768px) and (max-width: 992px) {
-
   .navbar__link {
     margin-left: 0.4em;
     margin-right: 0.4em;
     font-size: 0.9em;
-    cursor: pointer;
-    letter-spacing: .1em;
-    text-indent: .2em;
   }
 }
 
 @media (max-width: 768px) {
-
   .navbar__link::after {
-    background: none;
-    content: "";
     display: none;
-    margin-top: 0;
-    height: 0;
-    width: 0;
   }
 
-  .navbar__link--active::after {
-    width: 0;
-  }
-  
-  .navbar__link--active:hover::after {
-    width: 0;
-  }
-
+  .navbar__link--active::after,
+  .navbar__link--active:hover::after,
   .navbar__link:hover::after {
     width: 0;
   }
@@ -145,6 +159,11 @@ section.timeline-card-content div.card-description > p {
 .header {
   font-size: 3em;
   font-weight: bold;
-  margin-bottom: 25px;
+  margin-bottom: 500px;
+  margin-top: 100px;
+  text-align: left;
+  position: absolute;
+  top: 10px;
+  left: 75px;
+  font-family: 'Baguette Script', cursive;
 }
-
